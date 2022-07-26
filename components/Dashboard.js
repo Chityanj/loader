@@ -1,4 +1,6 @@
+import { list } from "postcss";
 import { useState } from "react";
+import {db} from "../firebase"
 
 
 async function getAccount() {
@@ -8,6 +10,19 @@ async function getAccount() {
   const account = accounts[0];
 
   return account;
+}
+
+async function getData(accountAddress){
+  const userRef = db.collection('UserInfo')
+      console.log(currentUser.email)
+      const querySnap = await userRef.where('wallid', '==', accountAddress).get()
+      let temp = []
+      querySnap.forEach(doc => {
+        console.log(doc.data())
+        temp.push(doc.data())
+      })
+      console.log(temp)
+      setUserData(temp)
 }
 
 export default function ConnectButton() {
@@ -27,6 +42,7 @@ export default function ConnectButton() {
     }
   };
   if (accountAddress) {
+    getData(accountAddress);
     return (
       <div>
         Address: {accountAddress}
